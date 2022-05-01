@@ -1,0 +1,109 @@
+; VARIOUS PREPROCESSING OPTIONS
+title                    = NPT MD 
+cpp                      = /lib/cpp
+include                  = 
+;define                   = -DPOSRES 
+
+; RUN CONTROL PARAMETERS
+integrator               = md
+; Start time and timestep in ps
+tinit                    = 0
+dt                      = 0.002 ;2fs
+nsteps                   = 450000000 ; set to nstlim
+; For exact run continuation or redoing part of a run
+init_step                = 0
+; mode for center of mass motion removal
+comm-mode                = Linear
+; number of steps for center of mass motion removal
+nstcomm                  = 10000
+; group(s) for center of mass motion removal
+comm-grps                = ;defaults to the whole system
+
+
+; OUTPUT CONTROL OPTIONS
+; Output frequency for coords (x), velocities (v) and forces (f)
+nstxout                  = 0 ;coords
+nstvout                  = 0 ;velocities
+nstfout                  = 0 ;forces
+; Checkpointing helps you continue after crashes
+; Output frequency for energies to log file and energy file
+nstlog                   = 50000
+nstenergy                = 50000
+; Output frequency and precision for xtc file
+nstxout-compressed       = 50000
+compressed-x-precision   = 1000
+
+
+; NEIGHBORSEARCHING PARAMETERS
+;cutoff scheme to use (Verlet/group)
+cutoff-scheme            = Verlet
+; nblist update frequency
+nstlist                  = 35
+; ns algorithm (simple or grid)
+ns_type                  = grid
+; Periodic boundary conditions: xyz (default), no (vacuum)
+; or full (infinite systems only)
+pbc                      = xyz
+;no periodic molecules, use all finite molecules
+periodic-molecules       = no
+;verlet buffer tolerence (max allowed error) , sets rlist indirectly and adaptivley
+verlet-buffer-tolerance  = 0.005
+
+; OPTIONS FOR ELECTROSTATICS AND VDW
+; Method for doing electrostatics
+coulombtype              = PME
+rcoulomb-switch          = 0 ; options for force or potential switching
+rcoulomb                 = 1.4 ; distance for coloumb cutoff
+; Dielectric constant (DC) for cut-off or DC of reaction field
+epsilon-rf                = 78.5 ; rf dielectric constant
+; Method for doing Van der Waals
+vdw-type                 = Cut-off
+vdw-modifier             = Potential-shift-Verlet
+; cut-off lengths       
+rvdw-switch              = 0
+rvdw                     = 1.4
+; Apply long range dispersion corrections for Energy and Pressure
+DispCorr                 = no ; not true for membrane systems
+; Extension of the potential lookup tables beyond the cut-off
+table-extension          = 1
+
+
+ OPTIONS FOR WEAK COUPLING ALGORITHMS
+;Temperature coupling  
+Tcoupl                   = v-rescale
+; Groups to couple separately
+tc-grps                  =  Protein Water_and_ions lipids 
+;Time constant (ps) and reference temperature (K)
+tau-t                    = 0.1      0.1     0.1 
+ref-t                    = 310      310     310
+
+
+
+; Parrinello-Rahman produces better pressure distribution,
+; but is less stable and can oscillate if the box has to dramatically change 
+; size. Therefore it is best to equilibrate with Berendsen (above) to get the 
+; box size right, and then switch to PR for production runs.
+pcoupl                  = Parrinello-Rahman
+pcoupltype             = semiisotropic
+tau-p                   = 5
+compressibility         = 4.5e-5 4.5e-5 4.5e-5
+ref-p                   = 1.0 1.0 1.0
+
+
+; If position restraints and pressure coupling are both on, the reference coords
+; should be scaled with the box. 'com' and 'all' both work, if one causes crashes
+; use the other
+;refcoord-scaling         = com
+
+
+; GENERATE VELOCITIES FOR STARTUP RUN
+gen_vel                  = yes
+gen-temp                 = 310
+gen-seed                 = -1
+
+; OPTIONS FOR BONDS    
+; Type of constraint algorithm
+constraint-algorithm     = Lincs
+lincs-warnangle          = 90
+continuation             = no
+constraints              = all-bonds
