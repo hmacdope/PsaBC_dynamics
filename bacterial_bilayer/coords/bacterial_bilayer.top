@@ -23,20 +23,20 @@
 
 
 ; include CL1
-#include "CDLp_16d9_16_16_14.itp"
+#include "CDL_14_16_16d9_16.itp"
 
 ;include CL2
-#include "CDLp_16d7_16_18_18d9.itp"
+#include "CDL_16_16d7_18d9_18.itp"
 
 ; include PG3 
-#include "POPG_16_14.itp"
+#include "PG_14_16.itp"
 
 ; Include PG1
-#include "POPG_16_18d7.itp"
+#include "PG_18d7_16.itp"
 
 
 ; Include PG2
-#include "POPG_18_18d7.itp"
+#include "PG_18d7_18.itp"
 
 
 ; Include water topology
